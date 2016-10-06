@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -617,123 +618,135 @@ public class LineManager : MonoBehaviour {
 		if (Input.GetKey(KeyCode.D)) {
 			if (Input.GetKey(KeyCode.S)) {
 				if (playerID == 1) {
+					horizontalArray[0, 2] = true;
 					greenHThree.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[0, 2] = true;
 					blueHThree.SetActive(true);
 					return true;
 				}
-				//horizontalArray[0, 2] = true;
 			} else if (Input.GetKey(KeyCode.J)) {
 				if (playerID == 1) {
+					verticalArray[0, 3] = true;
 					greenVFour.SetActive(true);
 					return true;
 				} else {
+					verticalArray[0, 3] = true;
 					blueVFour.SetActive(true);
 					return true;
 				}
-				//verticalArray[0, 3] = true;
 			}
 		}
 
 		if (Input.GetKey(KeyCode.F)) {
 			if (Input.GetKey(KeyCode.W)) {
 				if (playerID == 1) {
+					verticalArray[0, 0] = true;
 					greenVOne.SetActive(true);
 					return true;
 				} else {
+					verticalArray[0, 0] = true;
 					blueVOne.SetActive(true);
 					return true;
 				}
-				//verticalArray[0, 0] = true;
 			} else if (Input.GetKey(KeyCode.G)) {
 				if (playerID == 1) {
+					horizontalArray[1, 0] = true;
 					greenHFour.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[1, 0] = true;
 					blueHFour.SetActive(true);
 					return true;
 				}
-				//horizontalArray[1, 0] = true;
 			} else if (Input.GetKey(KeyCode.K)) {
 				if (playerID == 1) {
+					verticalArray[1, 0] = true;
 					greenVFive.SetActive(true);
 					return true;
 				} else {
+					verticalArray[1, 0] = true;
 					blueVFive.SetActive(true);
 					return true;
 				}
-				//verticalArray[1, 0] = true;
 			}
 		}
 
 		if (Input.GetKey(KeyCode.G)) {
 			if (Input.GetKey(KeyCode.F)) {
 				if (playerID == 1) {
+					horizontalArray[1, 0] = true;
 					greenHFour.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[1, 0] = true;
 					blueHFour.SetActive(true);
 					return true;
 				}
-				//horizontalArray[1, 0] = true;
 			} else if (Input.GetKey(KeyCode.A)) {
 				if (playerID == 1) {
+					verticalArray[0, 1] = true;
 					greenVTwo.SetActive(true);
 					return true;
 				} else {
+					verticalArray[0, 1] = true;
 					blueVTwo.SetActive(true);
 					return true;
 				}
-				//verticalArray[0, 1] = true;
 			} else if (Input.GetKey(KeyCode.H)) {
 				if (playerID == 1) {
+					horizontalArray[1, 1] = true;
 					greenHFive.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[1, 1] = true;
 					blueHFive.SetActive(true);
 					return true;
 				}
-				//horizontalArray[1, 1] = true;
 			} else if (Input.GetKey(KeyCode.L)) {
 				if (playerID == 1) {
+					verticalArray[1, 1] = true;
 					greenVSix.SetActive(true);
 					return true;
 				} else {
+					verticalArray[1, 1] = true;
 					blueVSix.SetActive(true);
 					return true;
 				}
-				//verticalArray[1, 1] = true;
 			}
 		}
 
 		if (Input.GetKey(KeyCode.H)) {
 			if (Input.GetKey(KeyCode.S)) {
 				if (playerID == 1) {
+					verticalArray[0, 2] = true;
 					greenVThree.SetActive(true);
 					return true;
 				} else {
+					verticalArray[0, 2] = true;
 					blueVThree.SetActive(true);
 					return true;
 				}
-				//verticalArray[0, 2] = true;
 			} else if (Input.GetKey(KeyCode.G)) {
 				if (playerID == 1) {
+					horizontalArray[1, 1] = true;
 					greenHFive.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[1, 1] = true;
 					blueHFive.SetActive(true);
 					return true;
 				}
-				//horizontalArray[1, 1] = true;
 			} else if (Input.GetKey(KeyCode.Z)) {
 				if (playerID == 1) {
+					verticalArray[1, 2] = true;
 					greenVSeven.SetActive(true);
 					return true;
 				} else {
+					verticalArray[1, 2] = true;
 					blueVSeven.SetActive(true);
 					return true;
-					//verticalArray[1, 2] = true;
 				}
 			} else if (Input.GetKey(KeyCode.J)) {
 				if (playerID == 1) {
@@ -750,112 +763,125 @@ public class LineManager : MonoBehaviour {
 		if (Input.GetKey(KeyCode.J)) {
 			if (Input.GetKey(KeyCode.D)) {
 				if (playerID == 1) {
+					verticalArray[0, 3] = true;
 					greenVFour.SetActive(true);
 					return true;
 				} else {
+					verticalArray[0, 3] = true;
 					blueVFour.SetActive(true);
 					return true;
 				}
-				//verticalArray[0, 3] = true;
 			} else if (Input.GetKey(KeyCode.H)) {
 				if (playerID == 1) {
+					horizontalArray[1, 2] = true;
 					greenHSix.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[1, 2] = true;
 					blueHSix.SetActive(true);
 					return true;
 				}
-				//horizontalArray[1, 2] = true;
 			} else if (Input.GetKey(KeyCode.X)) {
 				if (playerID == 1) {
+					verticalArray[1, 3] = true;
 					greenVEight.SetActive(true);
 					return true;
 				} else {
+					verticalArray[1, 3] = true;
 					blueVEight.SetActive(true);
 					return true;
 				}
-				//verticalArray[1, 3] = true;
 			}
 		}
 
 		if (Input.GetKey(KeyCode.K)) {
 			if (Input.GetKey(KeyCode.F)) {
-				Debug.Log("4");
+				//Debug.Log("4");
 				if (playerID == 1) {
+					verticalArray[1, 0] = true;
 					greenVFive.SetActive(true);
 					return true;
 				} else {
+					verticalArray[1, 0] = true;
 					blueVFive.SetActive(true);
 					return true;
 				}
-				//verticalArray[1, 0] = true;
 			} else if (Input.GetKey(KeyCode.L)) {
 				if (playerID == 1) {
+					horizontalArray[2, 0] = true;
 					greenHSeven.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[2, 0] = true;
 					blueHSeven.SetActive(true);
 					return true;
 				}
-				//horizontalArray[2, 0] = true;
 			} else if (Input.GetKey(KeyCode.Space)) {
 				if (playerID == 1) {
+					verticalArray[2, 0] = true;
 					greenVNine.SetActive(true);
 					return true;
 				} else {
+					verticalArray[2, 0] = true;
 					blueVNine.SetActive(true);
 					return true;
 				}
-				//verticalArray[2, 0] = true;
 			}
 		}
 
 		if (Input.GetKey(KeyCode.L)) {
 			if (Input.GetKey(KeyCode.G)) {
 				if (playerID == 1) {
+					verticalArray[1, 1] = true;
 					greenVSix.SetActive(true);
 					return true;
 				} else {
+					verticalArray[1, 1] = true;
 					blueVSix.SetActive(true);
 					return true;
 				}
-				//verticalArray[1, 1] = true;
 			} else if (Input.GetKey(KeyCode.Z)) {
 				if (playerID == 1) {
+					horizontalArray[2, 1] = true;
 					greenHEight.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[2, 1] = true;
 					blueHEight.SetActive(true);
 					return true;
 				}
-				//horizontalArray[2, 1] = true;
 			} else if (Input.GetKey(KeyCode.UpArrow)) {
 				if (playerID == 1) {
+					verticalArray[2, 1] = true;
 					greenVTen.SetActive(true);
 					return true;
 				} else {
+					verticalArray[2, 1] = true;
 					blueVTen.SetActive(true);
 					return true;
 				}
-				//verticalArray[2, 1] = true;
 			}
 		}
 
 		if (Input.GetKey(KeyCode.Z)) {
 			if (Input.GetKey(KeyCode.H)) {
 				if (playerID == 1) {
+					verticalArray[1, 2] = true;
 					greenVSeven.SetActive(true);
 					return true;
 				} else {
+					verticalArray[1, 2] = true;
 					blueVSeven.SetActive(true);
 					return true;
 					//verticalArray[1, 2] = true;
 				}
 			} else if (Input.GetKey(KeyCode.L)) {
 				if (playerID == 1) {
+					horizontalArray[2, 1] = true;
 					greenHEight.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[2, 1] = true;
 					blueHEight.SetActive(true);
 					return true;
 				}
@@ -863,18 +889,22 @@ public class LineManager : MonoBehaviour {
 
 			} else if (Input.GetKey(KeyCode.X)) {
 				if (playerID == 1) {
+					horizontalArray[2, 2] = true;
 					greenHNine.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[2, 2] = true;
 					blueHNine.SetActive(true);
 					return true;
 				}
 				//horizontalArray[2, 2] = true;
 			} else if (Input.GetKey(KeyCode.DownArrow)) {
 				if (playerID == 1) {
+					verticalArray[2, 2] = true;
 					greenVEleven.SetActive(true);
 					return true;
 				} else {
+					verticalArray[2, 2] = true;
 					blueVEleven.SetActive(true);
 					return true;
 				}
@@ -885,27 +915,33 @@ public class LineManager : MonoBehaviour {
 		if (Input.GetKey(KeyCode.X)) {
 			if (Input.GetKey(KeyCode.J)) {
 				if (playerID == 1) {
+					verticalArray[1, 3] = true;
 					greenVEight.SetActive(true);
 					return true;
 				} else {
+					verticalArray[1, 3] = true;
 					blueVEight.SetActive(true);
 					return true;
 				}
 				//verticalArray[1, 3] = true;
 			} else if (Input.GetKey(KeyCode.Z)) {
 				if (playerID == 1) {
+					horizontalArray[2, 2] = true;
 					greenHNine.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[2, 2] = true;
 					blueHNine.SetActive(true);
 					return true;
 				}
 				//horizontalArray[2, 2] = true;
 			} else if (Input.GetKey(KeyCode.LeftArrow)) {
 				if (playerID == 1) {
+					verticalArray[2, 3] = true;
 					greenVTwelve.SetActive(true);
 					return true;
 				} else {
+					verticalArray[2, 3] = true;
 					blueVTwelve.SetActive(true);
 					return true;
 				}
@@ -916,18 +952,22 @@ public class LineManager : MonoBehaviour {
 		if (Input.GetKey(KeyCode.Space)) {
 			if (Input.GetKey(KeyCode.K)) {
 				if (playerID == 1) {
+					verticalArray[2, 0] = true;
 					greenVNine.SetActive(true);
 					return true;
 				} else {
+					verticalArray[2, 0] = true;
 					blueVNine.SetActive(true);
 					return true;
 				}
 				//verticalArray[2, 0] = true;
 			} else if (Input.GetKey(KeyCode.UpArrow)) {
 				if (playerID == 1) {
+					horizontalArray[3, 0] = true;
 					greenHTen.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[3, 0] = true;
 					blueHTen.SetActive(true);
 					return true;
 				}
@@ -938,27 +978,33 @@ public class LineManager : MonoBehaviour {
 		if (Input.GetKey(KeyCode.UpArrow)) {
 			if (Input.GetKey(KeyCode.L)) {
 				if (playerID == 1) {
+					verticalArray[2, 1] = true;
 					greenVTen.SetActive(true);
 					return true;
 				} else {
+					verticalArray[2, 1] = true;
 					blueVTen.SetActive(true);
 					return true;
 				}
 				//verticalArray[2, 1] = true;
 			} else if (Input.GetKey(KeyCode.Space)) {
 				if (playerID == 1) {
+					horizontalArray[3, 0] = true;
 					greenHTen.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[3, 0] = true;
 					blueHTen.SetActive(true);
 					return true;
 				}
 				//horizontalArray[3, 0] = true;
 			} else if (Input.GetKey(KeyCode.DownArrow)) {
 				if (playerID == 1) {
+					horizontalArray[3, 1] = true;
 					greenHEleven.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[3, 1] = true;
 					blueHEleven.SetActive(true);
 					return true;
 				}
@@ -969,27 +1015,33 @@ public class LineManager : MonoBehaviour {
 		if (Input.GetKey(KeyCode.DownArrow)) {
 			if (Input.GetKey(KeyCode.Z)) {
 				if (playerID == 1) {
+					verticalArray[2, 2] = true;
 					greenVTwelve.SetActive(true);
 					return true;
 				} else {
+					verticalArray[2, 2] = true;
 					blueVTwelve.SetActive(true);
 					return true;
 				}
 				//verticalArray[2, 2] = true;
 			} else if (Input.GetKey(KeyCode.UpArrow)) {
 				if (playerID == 1) {
+					horizontalArray[3, 1] = true;
 					greenHEleven.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[3, 1] = true;
 					blueHEleven.SetActive(true);
 					return true;
 				}
 				//horizontalArray[3, 1] = true;
 			} else if (Input.GetKey(KeyCode.LeftArrow)) {
 				if (playerID == 1) {
+					horizontalArray[3, 2] = true;
 					greenHTwelve.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[3, 2] = true;
 					blueHTwelve.SetActive(true);
 					return true;
 				}
@@ -1000,18 +1052,22 @@ public class LineManager : MonoBehaviour {
 		if (Input.GetKey(KeyCode.LeftArrow)) {
 			if (Input.GetKey(KeyCode.X)) {
 				if (playerID == 1) {
+					verticalArray[2, 3] = true;
 					greenVTwelve.SetActive(true);
 					return true;
 				} else {
+					verticalArray[2, 3] = true;
 					blueVTwelve.SetActive(true);
 					return true;
 				}
 				//verticalArray[2, 3] = true;
 			} else if (Input.GetKey(KeyCode.DownArrow)) {
 				if (playerID == 1) {
+					horizontalArray[3, 2] = true;
 					greenHTwelve.SetActive(true);
 					return true;
 				} else {
+					horizontalArray[3, 2] = true;
 					blueHTwelve.SetActive(true);
 					return true;
 				}
