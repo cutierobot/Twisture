@@ -1,8 +1,14 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System;
+using UnityEngine.UI;
+//using System;
 
+public struct Players {
+	public int playerID;
+	public bool playerTurn;
+	public int score;
+};
 
 public class LineManager : MonoBehaviour {
 
@@ -55,38 +61,28 @@ public class LineManager : MonoBehaviour {
 	private GameObject blueHTen;
 	private GameObject blueHEleven;
 	private GameObject blueHTwelve;
+	Players playerOne;
+	Players playerTwo;
+
+	//public bodyPartGenerator bodyParts;
+	private BodyPartsManager bodyPartsScript;
+	private GameObject bodyPartsManager;
 
 
 
+	//popups
+	private GameObject playerOnePopUp;
+	private GameObject playerTwoPopUp;
+	private GameObject playerOneWins;
+	private GameObject playerTwoWins;
+	private GameObject difChoose;
+	public Text changePlayerText;
 
-	//private GameObject 
-	//import collaborators for this class
-	//private DotScript dotScript;
-	private DotManager dotManagerScript;
-
-	private Line lineScript;
-	private GameObject line;
-	private List<Line> lineList;
-	
-	private	LineLibrary lineLibraryScript;
-	private List<List<Line>> lineLibraryList;
-
-	private string mouse1;
-	private string mouse2;
-
-	private int lineCount = 0;// counts what line you are on in lineList
-	private int lineNumber = 0; //the number of lines in the lineList
-
-	private PlayerManager player;
-	private int playerID;
-
+	public Text playerOneCount;
+	public Text playerTwoCount;
 	private bool[,] horizontalArray;
 	private bool[,] verticalArray;
-
-	private int mouse1Int;
-	private int mouse2Int;
-	private int clickCount;
-	private int doubleClick;
+	private bool[] boxCheckArray;
 
 
 	void Awake() {
@@ -140,244 +136,138 @@ public class LineManager : MonoBehaviour {
 		blueHEleven = GameObject.Find("blueHEleven");
 		blueHTwelve = GameObject.Find("blueHTwelve");
 
-
-		//Retrieve DotManager.cs script from GameObject DotManager.
-		GameObject dotManager = GameObject.Find("DotManager");
-		dotManagerScript = dotManager.GetComponent<DotManager>();
-
-		//creates a reference to PlayerManager
-		GameObject playerManager = GameObject.Find("PlayerManager");
-		player = playerManager.GetComponent<PlayerManager>();
-
-		
-		line = GameObject.Find("line");
-		lineScript = line.GetComponent<Line>();
-		lineList = new List<Line>();
-
-		GameObject lineLibrary = GameObject.Find("lineLibrary");
-		lineLibraryScript = lineLibrary.GetComponent<LineLibrary>();
-		lineLibraryList = new List<List<Line>>();
-
-		mouse1 = dotManagerScript.Mouse1();
-		mouse2 = dotManagerScript.Mouse2();
-		playerID = player.getPlayerID();
-		convertMouse1(mouse1);
-		convertMouse2(mouse2);
-		
+		//popups
+		playerOnePopUp = GameObject.Find("playerOnePopUp");
+		playerTwoPopUp = GameObject.Find("playerTwoPopUp");
+		playerOneWins = GameObject.Find("playerOneWins");
+		playerTwoWins = GameObject.Find("playerTwoWins");
+		difChoose = GameObject.Find("difChoose");
+		boxCheckArray = new bool[9];
+		bodyPartsManager = GameObject.Find("BodyPartsManager");
+		bodyPartsScript = bodyPartsManager.GetComponent<BodyPartsManager>();
+		changePlayerText = GetComponent<Text>();
 	}
 
-	void convertMouse1(string mouse1) {
-		switch(mouse1) {
-			case "dotOne" :
-				mouse1Int = 1;
-				break;
-			case "dotTwo" : 
-				mouse1Int = 2;
-				break;
-			case "dotThree" : 
-				mouse1Int = 3;
-				break;
-			case "dotFour" : 
-				mouse1Int = 4;
-				break;
-			case "dotFive" : 
-				mouse1Int = 5;
-				break;
-			case "dotSix" : 
-				mouse1Int = 6;
-				break;
-			case "dotSeven" : 
-				mouse1Int = 7;
-				break;
-			case "dotEight" : 
-				mouse1Int = 8;
-				break;
-			case "dotNine" : 
-				mouse1Int = 9;
-				break;
-			case "dotTen" : 
-				mouse1Int = 10;
-				break;
-			case "dotEleven" : 
-				mouse1Int = 11;
-				break;
-			case "dotTwelve" : 
-				mouse1Int = 12;
-				break;
-			case "dotThirteen" : 
-				mouse1Int = 13;
-				break;
-			case "dotFourteen" : 
-				mouse1Int = 14;
-				break;
-			case "dotFifteen" : 
-				mouse1Int = 15;
-				break;	
-			case "dotSixteen" : 
-				mouse1Int = 16;
-				break;
+
+	bool gameOver() {
+		int check = 0;
+		for (int i = 0; i < 9; ++i) {
+			if (boxCheckArray[i] == false) {
+				check = 1;
+			}
 		}
-	}
-
-	void convertMouse2(string mouse2) {
-		switch(mouse2) {
-			case "dotOne" :
-				mouse2Int = 1;
-				break;
-			case "dotTwo" : 
-				mouse2Int = 2;
-				break;
-			case "dotThree" : 
-				mouse2Int = 3;
-				break;
-			case "dotFour" : 
-				mouse2Int = 4;
-				break;
-			case "dotFive" : 
-				mouse2Int = 5;
-				break;
-			case "dotSix" : 
-				mouse2Int = 6;
-				break;
-			case "dotSeven" : 
-				mouse2Int = 7;
-				break;
-			case "dotEight" : 
-				mouse2Int = 8;
-				break;
-			case "dotNine" : 
-				mouse2Int = 9;
-				break;
-			case "dotTen" : 
-				mouse2Int = 10;
-				break;
-			case "dotEleven" : 
-				mouse2Int = 11;
-				break;
-			case "dotTwelve" : 
-				mouse2Int = 12;
-				break;
-			case "dotThirteen" : 
-				mouse2Int = 13;
-				break;
-			case "dotFourteen" : 
-				mouse2Int = 14;
-				break;
-			case "dotFifteen" : 
-				mouse2Int = 15;
-				break;	
-			case "dotSixteen" : 
-				mouse2Int = 16;
-				break;
-		}
-	}
-
-	bool isHorizontal() {
-		if(mouse1 == "dotOne" && mouse2 == "dotTwo") {
-			return true;
-		} else if(mouse1 == "dotTwo" && mouse2 == "dotOne") {
-			return true;
-		} else if(mouse1 == "dotTwo" && mouse2 == "dotThree") {
-			return true;
-		} else if(mouse1 == "dotThree" && mouse2 == "dotTwo") {
-			return true;
-		} else if(mouse1 == "dotThree" && mouse2 == "dotFour") {
-			return true;
-		} else if(mouse1 == "dotFour" && mouse2 == "dotThree") {
-			return true;
-		} else if(mouse1 == "dotFive" && mouse2 == "dotSix") {
-			return true;
-		} else if(mouse1 == "dotSix" && mouse2 == "dotFive") {
-			return true;
-		} else if(mouse1 == "dotSix" && mouse2 == "dotSeven") {
-			return true;
-		} else if(mouse1 == "dotSeven" && mouse2 == "dotSix") {
-			return true;
-		} else if(mouse1 == "dotSeven" && mouse2 == "dotEight") {
-			return true;
-		} else if(mouse1 == "dotEight" && mouse1 == "dotSeven") {
-			return true;
-		} else if(mouse1 == "dotNine" && mouse2 == "dotTen") {
-			return true;
-		} else if(mouse1 == "dotTen" && mouse2 == "dotNine") {
-			return true;
-		} else if(mouse1 == "dotTen" && mouse2 == "dotEleven") {
-			return true;
-		} else if(mouse1 == "dotEleven" && mouse2 == "dotTen") {
-			return true;
-		} else if(mouse1 == "dotEleven" && mouse2 == "dotTwelve") {
-			return true;
-		} else if(mouse1 == "dotTwelve" && mouse2 == "dotEleven") {
-			return true;
-		} else if(mouse1 == "dotThirteen" && mouse2 == "dotFourteen") {
-			return true;
-		} else if(mouse1 == "dotFourteen" && mouse2 == "dotThirteen") {
-			return true;
-		} else if(mouse1 == "dotFourteen" && mouse2 == "dotFifteen") {
-			return true;
-		} else if(mouse1 == "dotFifteen" && mouse2 == "dotFourteen") {
-			return true;
-		} else if(mouse1 == "dotFifteen" && mouse2 == "dotSixteen") {
-			return true;
-		} else if(mouse1 == "dotSixteen" && mouse2 == "dotFifteen") {
+		if (check == 0) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
+	void boxCheckArrayInit() {
+		for (int i = 0; i < 9; ++i) {
+			boxCheckArray[i] = false;
+		}
+	}
 
-	bool isVertical() {
-		if(mouse1 == "dotOne" && mouse2 == "dotFive") {
-			return true;
-		} else if(mouse1 == "dotFive" && mouse2 == "dotOne") {
-			return true;
-		} else if(mouse1 == "dotTwo" && mouse2 == "dotSix") {
-			return true;
-		} else if(mouse1 == "dotSix" && mouse2 == "dotTwo") {
-			return true;
-		} else if(mouse1 == "dotThree" && mouse2 == "dotSeven") {
-			return true;
-		} else if(mouse1 == "dotSeven" && mouse2 == "dotThree") {
-			return true;
-		} else if(mouse1 == "dotFour" && mouse2 == "dotEight") {
-			return true;
-		} else if(mouse1 == "dotEight" && mouse2 == "dotFour") {
-			return true;
-		} else if(mouse1 == "dotFive" && mouse2 == "dotNine") {
-			return true;
-		} else if(mouse1 == "dotNine" && mouse2 == "dotFive") {
-			return true;
-		} else if(mouse1 == "dotSix" && mouse2 == "dotTen") {
-			return true;
-		} else if(mouse1 == "dotTen" && mouse2 == "dotSix") {
-			return true;
-		} else if(mouse1 == "dotSeven" && mouse2 == "dotEleven") {
-			return true;
-		} else if(mouse1 == "dotEleven" && mouse2 == "dotSeven") {
-			return true;
-		} else if(mouse1 == "dotEight" && mouse2 == "dotTwelve") {
-			return true;
-		} else if(mouse1 == "dotTwelve" && mouse2 == "dotEight") {
-			return true;
-		} else if(mouse1 == "dotNine" && mouse2 == "dotThirteen") {
-			return true;
-		} else if(mouse1 == "dotThirteen" && mouse2 == "dotNine") {
-			return true;
-		} else if(mouse1 == "dotTen" && mouse2 == "dotFourteen") {
-			return true;
-		} else if(mouse1 == "dotFourteen" && mouse2 == "dotTen") {
-			return true;
-		} else if(mouse1 == "dotEleven" && mouse2 == "dotFifteen") {
-			return true;
-		} else if(mouse1 == "dotFifteen" && mouse2 == "dotEleven") {
-			return true;
-		} else if(mouse1 == "dotTwelve" && mouse2 == "dotSixteen") {
-			return true;
-		} else if(mouse1 == "dotSixteen" && mouse2 == "dotTwelve") {
-			return true;
-		} else {
-			return false;
+	void boxOneCheck() {
+		if (boxCheckArray[0] != true) {
+			if (horizontalArray[0, 0] == true && horizontalArray[1, 0] == true) {
+				if (verticalArray[0, 0] == true && verticalArray[0, 1] == true) {
+					boxCheckArray[0] = true;
+					setScore();
+				}
+			}
+		}
+	}
+
+	void boxTwoCheck() {
+		if (boxCheckArray[1] != true) {
+			if (horizontalArray[0, 1] == true && horizontalArray[1, 1] == true) {
+				if (verticalArray[0, 1] == true && verticalArray[0, 2] == true) {
+					boxCheckArray[1] = true;
+					setScore();
+
+				}
+			}
+		}
+	}
+
+	void boxThreeCheck() {
+		if (boxCheckArray[2] != true) {
+			if (horizontalArray[0, 2] == true && horizontalArray[1, 2] == true) {
+				if (verticalArray[0, 2] == true && verticalArray[0, 3] == true) {
+					boxCheckArray[2] = true;
+					setScore();
+				}
+			}
+		}
+	}
+
+	void boxFourCheck() {
+		if (boxCheckArray[3] != true) {
+			if (horizontalArray[1, 0] == true && horizontalArray[2, 0] == true) {
+				if (verticalArray[1, 0] == true && verticalArray[1, 1] == true) {
+					boxCheckArray[3] = true;
+					setScore();
+
+				}
+			}
+		}
+	}
+
+	void boxFiveCheck()	 {
+		if (boxCheckArray[4] != true) {
+			if (horizontalArray[1, 1] == true && horizontalArray[2, 1] == true) {
+				if (verticalArray[1, 1] == true && verticalArray[1, 2] == true) {
+					boxCheckArray[4] = true;
+					setScore();
+				}
+			}
+		}
+	}
+
+	void boxSixCheck() {
+		if (boxCheckArray[5] != true) {
+			if (horizontalArray[1, 1] == true && horizontalArray[2, 2] == true) {
+				if (verticalArray[1, 2] == true && verticalArray[1, 3] == true) {
+					boxCheckArray[5] = true;
+					setScore();
+
+				}
+			}
+		}
+	}
+
+	void boxSevenCheck() {
+		if (boxCheckArray[6] != true) {
+			if (horizontalArray[2, 0] == true && horizontalArray[3, 0] == true) {
+				if (verticalArray[2, 0] == true && verticalArray[2, 1] == true) {
+					boxCheckArray[6] = true;
+					setScore();
+				}
+			}
+		}
+	}
+
+	void boxEightCheck() {
+		if (boxCheckArray[7] != true) {
+			if (horizontalArray[2, 1] == true && horizontalArray[3, 1] == true) {
+				if (verticalArray[2, 1] == true && verticalArray[2, 2] == true) {
+					boxCheckArray[7] = true;
+					setScore();
+				}
+			}
+		}
+	}
+
+	void boxNineCheck() {
+		if (boxCheckArray[8] != true) {
+			if (horizontalArray[2, 2] == true && horizontalArray[3, 2] == true) {
+				if (verticalArray[2, 2] == true && verticalArray[2, 3] == true) {
+					boxCheckArray[8] = true;
+					setScore();
+				}
+			}
 		}
 	}
 
@@ -434,47 +324,154 @@ public class LineManager : MonoBehaviour {
 		blueHTwelve.SetActive(false);
 		createHorizontalArrayList();
 		createVerticalArrayList();
+
+		playerOne.playerID = 1;
+		playerTwo.playerID = 2;
+		playerOne.playerTurn = true;
+		playerTwo.playerTurn = false;
+		playerOne.score = 0;
+		playerTwo.score = 0;
+		boxCheckArrayInit();
+
+		playerOnePopUp.SetActive(false);
+		playerTwoPopUp.SetActive(false);
+		playerOneWins.SetActive(false);
+		playerTwoWins.SetActive(false);
+		difChoose.SetActive(false);
+		displayScore();
+		bodyPartsScript.newBodyParts();
+		changePlayerText.text = "";
+		changePlayerText.fontSize = 48;
+
+
+
 	}
 
-	/*void clearMouse() {
-		mouse1Int = 333;
-	}*/
-	
+
+	private void changeTurn() {
+		if (playerOne.playerTurn) {
+			//Debug.Log("being printf");
+			playerTwo.playerTurn = true;
+			playerOne.playerTurn = false;
+			//playerTwoPopUp.SetActive(true);
+			//StartCoroutine(popUps(2));
+		} else {
+			//Debug.Log("chafjdhkjf");
+			playerTwo.playerTurn = false;
+			playerOne.playerTurn = true;
+			//playerOnePopUp.SetActive(true);
+			//StartCoroutine(popUps(1));
+		}
+		bodyPartsScript.newBodyParts();
+	}
+
+	/*Displays the score for both players*/
+	void displayScore() {
+		playerOneCount.text = "Count: " + playerOne.score.ToString();
+		playerTwoCount.text = "Count: " + playerTwo.score.ToString();
+	}
+
+	void setScore() {
+		if (playerOne.playerTurn) {
+			playerOne.score += 1;
+		}
+		if (playerTwo.playerTurn) {
+			playerTwo.score += 1;
+		}
+		//displayScore();
+	}
+
+	IEnumerator popUps(int number) {
+		if (number == 1) {
+			changePlayerText.text = "Player One's Turn";
+			yield return new WaitForSeconds(3);
+			changePlayerText.text = " ";
+		} else if (number == 2) {
+			changePlayerText.text = "Player Two's Turn";
+			yield return new WaitForSeconds(3);
+			changePlayerText.text = " ";
+		} else if (number == 0) {
+			changePlayerText.text = "Player One Start's";
+			yield return new WaitForSeconds(3);
+			changePlayerText.text = " ";
+		}
+		/*switch (number) {
+		case 1:
+		yield return new WaitForSeconds(5);
+		playerOneWins.SetActive(false);
+		break;
+		case 2:
+		yield return new WaitForSeconds(5);
+		playerTwoWins.SetActive(false);
+		break;
+		case 3:
+		yield return new WaitForSeconds(5);
+		playerOnePopUp.SetActive(false);
+		Debug.Log("player one");
+		break;
+		case 4:
+		yield return new WaitForSeconds(5);
+		playerTwoPopUp.SetActive(false);
+		Debug.Log("player2");
+		break;
+		case 5:
+		yield return new WaitForSeconds(5);
+		difChoose.SetActive(false);
+		break;
+		}*/
+
+
+
+
+
+		/*if (number == 3) {
+			yield return new WaitForSeconds(5);
+			playerOnePopUp.SetActive(false);
+			Debug.Log("player one");
+		} else if (number == 4) {
+			yield return new WaitForSeconds(5);
+			playerTwoPopUp.SetActive(false);
+			Debug.Log("player2");
+		}*/
+	}
+
+
+
+
 	// Update is called once per frame
 	void Update() {
-		clickCount = dotManagerScript.getCount();
-		if(clickCount == 1) {
-			mouse1 = dotManagerScript.Mouse1();
-			doubleClick = doubleClick + 1;
-			//Debug.Log("1");
-		} else if (clickCount == 2){
-			mouse2 = dotManagerScript.Mouse2();
-			doubleClick = doubleClick + 1;
-			//Debug.Log("2");
-		}
-		//Debug.Log("doubleClick" + doubleClick);
-		convertMouse1(mouse1);
-		convertMouse2(mouse2);
-		if(doubleClick == 2) {
-			if(isHorizontal()) {
-				//Debug.Log("is called");
-				if (horizontalArray[mouse1Int,mouse2Int] == false) {
-					createLine(mouse1, mouse2);
-					doubleClick = 0;
-					//Debug.Log("horizontalArray");
-				}
-			} else if(isVertical()){
-				if(verticalArray[mouse1Int,mouse2Int] == false){
-					createLine(mouse1, mouse2);
-					doubleClick = 0;
-					//Debug.Log("verticalArray");
-				}
+		if (playerOne.playerTurn) {
+			if (createLine(playerOne.playerID)) {
+				Debug.Log("player one");
+				changeTurn();
+
+			}
+			//Debug.Log("player one");
+		} else {
+			if (createLine(playerTwo.playerID)) {
+				Debug.Log("player Two");
+				changeTurn();
 			}
 		}
+		boxOneCheck();
+		boxTwoCheck();
+		boxThreeCheck();
+		boxFourCheck();
+		boxFiveCheck();
+		boxSixCheck();
+		boxSevenCheck();
+		boxEightCheck();
+		boxNineCheck();
+		//finishTurn();
+		if (gameOver()) {
+			winner();
+		}
+		displayScore();
 	}
 
 	void createHorizontalArrayList() {
 		horizontalArray = new bool[,] {
+			{false, false, false},
 			{false, false, false},
 			{false, false, false},
 			{false, false, false}
@@ -483,413 +480,544 @@ public class LineManager : MonoBehaviour {
 
 	void createVerticalArrayList() {
 		verticalArray = new bool[,] {
-			{false, false, false},
-			{false, false, false},
-			{false, false, false}
+			{false, false, false, false},
+			{false, false, false, false},
+			{false, false, false, false}
 		};
 	}
 
-	/*
-		Records the mouse1, mouse2 and playerID of the current line.
-
-		newMouse1: Vector3 position to be added to the list.
-		newMouse2: Vector3 position to be added to the list.
-		newPlayerID: intenger representing the player that drew the line. 1
-			represents player1 and 2 represetns player2.
-	*/
-	void recordLine(string newMouse1, string newMouse2, int newPlayerID) {
-		lineList.Add(new Line(newMouse1, newMouse2, newPlayerID));
-		lineNumber= lineNumber + 1;
+	int winner() {
+		if (playerOne.score > playerTwo.score) {
+			return 1;
+		}
+		if (playerOne.score < playerTwo.score) {
+			return 2;
+		}
+		return 0;
 	}
 
+	//green is player1 blue is player 2
+	private bool createLine(int playerID) {
+		//private void createLine() {
+		if (Input.GetKey(KeyCode.W)) {
+			if (Input.GetKey(KeyCode.A)) {
+				/*if (greenHOne.activeSelf == true || blueHOne.activeSelf == true) {
+					StartCoroutine(popUps(5));
+				} else {*/
 
-	/*
-		Checks the list for dublicate values. If a duplicate if found method
-		returns true otherwise false.
-	*/
-	bool checkList(string newMouse1, string newMouse2) {
-		for (int list = 0; list < lineNumber; list = list + 1) {
-			if (lineList[lineCount].GetMouse1().Equals(newMouse1) || 
-				lineList[lineCount].GetMouse1().Equals(newMouse2)) {
-				if (lineList[lineCount].GetMouse2().Equals(newMouse2) || 
-					lineList[lineCount].GetMouse2().Equals(newMouse2)) {
+
+				if (playerID == 1) {
+					/*if set active do nothing else set active*/
+					horizontalArray[0, 0] = true;
+					greenHOne.SetActive(true);
+					return true;
+				} else {
+					blueHOne.SetActive(true);
+					horizontalArray[0, 0] = true;
+					return true;
+				}
+
+
+				//}
+				//checkKey(int one, int two, char axis)
+			} else if (Input.GetKey(KeyCode.F)) {
+				/*if (greenVOne.activeSelf == true || blueVOne.activeSelf == true) {
+					StartCoroutine(popUps(5));
+				} else {*/
+
+				if (playerID == 1) {
+					verticalArray[0, 0] = true;
+					greenVOne.SetActive(true);
+					return true;
+				} else {
+					verticalArray[0, 0] = true;
+					blueVOne.SetActive(true);
+					return true;
+				}
+				//}
+			}
+		}
+
+		if (Input.GetKey(KeyCode.A)) {
+			if (Input.GetKey(KeyCode.W)) {
+				/*if (greenHOne.activeSelf == true || blueHOne.activeSelf == true) {
+					StartCoroutine(popUps(5));
+				} else {*/
+
+
+				if (playerID == 1) {
+					horizontalArray[0, 0] = true;
+					greenHOne.SetActive(true);
+					return true;
+				} else {
+					horizontalArray[0, 0] = true;
+					blueHOne.SetActive(true);
+					return true;
+				}
+
+
+				//}
+			} else if (Input.GetKey(KeyCode.S)) {
+				if (playerID == 1) {
+					horizontalArray[0, 1] = true;
+					greenHTwo.SetActive(true);
+					return true;
+				} else {
+					horizontalArray[0, 1] = true;
+					blueHTwo.SetActive(true);
+					return true;
+				}
+			} else if (Input.GetKey(KeyCode.G)) {
+				if (playerID == 1) {
+					verticalArray[0, 1] = true;
+					greenVTwo.SetActive(true);
+					return true;
+				} else {
+					verticalArray[0, 1] = true;
+					blueVTwo.SetActive(true);
 					return true;
 				}
 			}
-			lineCount = lineCount + 1;
 		}
-		lineCount = 0;
-		return false;
-	}
-	//green is player1 blue is player 2
-	private void createLine(string mouse1, string mouse2) {
-		if(mouse1 == "dotOne") {
-			if(mouse2 == "dotTwo") {
-				if(playerID == 1) {
-					greenHOne.SetActive(true);
-				} else {
-					blueHOne.SetActive(true);
-				}
-				horizontalArray[0,0] = true;
-			} else if(mouse2 == "dotFive") {
-				if(playerID == 1) {
-					greenVOne.SetActive(true);
-				} else {
-					blueVOne.SetActive(true);
-				}
-				verticalArray[0,0] = true;
-			}
-		} else if(mouse1 == "dotTwo") {
-			if(mouse2 == "dotThree") {
-				if(playerID == 1) {
-					greenHTwo.SetActive(true);
-				} else {
-					blueHTwo.SetActive(true);
-				}
-				horizontalArray[0,1] = true;
-			} else if(mouse2 == "dotSix") {
-				if(playerID == 1) {
-					greenVTwo.SetActive(true);
-				} else {
-					blueVTwo.SetActive(true);
-				}
-				verticalArray[0,1] = true;
-			} else if(mouse2 == "dotOne") {
-				if(playerID == 1) {
-					greenHOne.SetActive(true);
-				} else {
-					blueHOne.SetActive(true);
-				}
-				horizontalArray[0,0] = true;
-			}
-		} else if(mouse1 == "dotThree") {
-			if(mouse2 == "dotFour") {
-				if(playerID == 1) {
-					greenHThree.SetActive(true);
-				} else {
-					blueHThree.SetActive(true);
-				}
-				horizontalArray[0,2] = true;
-			} else if(mouse2 == "dotSeven") {
-				if(playerID == 1) {
-					greenVThree.SetActive(true);
-				} else {
-					blueVThree.SetActive(true);
-				}
-				verticalArray[0,2] = true;
-			} else if(mouse2 == "dotTwo") {
-				if(playerID == 1) {
-					greenHTwo.SetActive(true);
-				} else {
-					blueHTwo.SetActive(true);
-				}
-				horizontalArray[0,1] = true;
-			}
-		} else if(mouse1 == "dotFour") {
-			if(mouse2 == "dotEight") {
-				if(playerID == 1) {
-					greenVFour.SetActive(true);
-				} else {
-					blueVFour.SetActive(true);
-				}
-				verticalArray[0,3] = true;
-			} else if(mouse2 == "dotThree")  {
-				if(playerID == 1) {
-					greenHThree.SetActive(true);
-				} else {
-					blueHThree.SetActive(true);
-				}
-				horizontalArray[0,2] = true;
-			}
-		} else if(mouse1 == "dotFive") {
-			if(mouse2 == "dotSix") {
-				if(playerID == 1) {
-					greenHFour.SetActive(true);
-				} else {
-					blueHFour.SetActive(true);
-					horizontalArray[1,0] = true;
-				}
-			} else if(mouse2 == "dotNine") {
-				if(playerID == 1) {
-					greenVFive.SetActive(true);
-				} else {
-					blueVFive.SetActive(true);
-				}
-				verticalArray[1,0] = true;
-			} else if(mouse2 == "dotOne") {
-				if(playerID == 1) {
-					greenVOne.SetActive(true);
-				} else {
-					blueVOne.SetActive(true);
-				}
 
-			}
-		} else if(mouse1 == "dotSix") {
-			if(mouse2 == "dotSeven") {
-				if(playerID == 1) {
-					greenHFive.SetActive(true);
+		if (Input.GetKey(KeyCode.S)) {
+			if (Input.GetKey(KeyCode.A)) {
+				if (playerID == 1) {
+					horizontalArray[0, 1] = true;
+					greenHTwo.SetActive(true);
+					return true;
 				} else {
-					blueHFive.SetActive(true);
+					horizontalArray[0, 1] = true;
+					blueHTwo.SetActive(true);
+					return true;
 				}
-				horizontalArray[1,1] = true;
-			} else if(mouse2 == "dotTen") {
-				if(playerID == 1) {
-					greenVSix.SetActive(true);
+			} else if (Input.GetKey(KeyCode.D)) {
+				if (playerID == 1) {
+					horizontalArray[0, 2] = true;
+					greenHThree.SetActive(true);
+					return true;
 				} else {
-					blueVSix.SetActive(true);
+					horizontalArray[0, 2] = true;
+					blueHThree.SetActive(true);
+					return true;
 				}
-				verticalArray[1,1] = true;
-			} else if(mouse2 == "dotFive") {
-				if(playerID == 1) {
-					greenHFour.SetActive(true);
-				} else {
-					blueHFour.SetActive(true);
-				}
-				horizontalArray[1,0] = true;
-			} else if(mouse2 == "dotTwo") {
-				if(playerID == 1) {
-					greenVTwo.SetActive(true);
-				} else {
-					blueVTwo.SetActive(true);
-				}
-			}
-		} else if(mouse1 == "dotSeven") {
-			if(mouse2 == "dotEight") {
-				if(playerID == 1) {
-					greenHSix.SetActive(true);
-				} else {
-					blueHSix.SetActive(true);
-				}
-				horizontalArray[1,2] = true;
-			} else if(mouse2 == "dotEleven") {
-				if(playerID == 1) {
-					greenVSeven.SetActive(true);
-				} else {
-					blueVSeven.SetActive(true);
-				}
-				verticalArray[1,2] = true;
-			} else if(mouse2 == "dotSix") {
-				if(playerID == 1) {
-					greenHFive.SetActive(true);
-				} else {
-					blueHFive.SetActive(true);
-				}
-				horizontalArray[1,1] = true;
-			} else if(mouse2 == "dotThree") {
-				if(playerID == 1) {
+			} else if (Input.GetKey(KeyCode.H)) {
+				if (playerID == 1) {
+					verticalArray[0, 2] = true;
 					greenVThree.SetActive(true);
+					return true;
 				} else {
+					verticalArray[0, 2] = true;
 					blueVThree.SetActive(true);
+					return true;
 				}
-				verticalArray[0,2] = true;
-			}
-		} else if(mouse1 == "dotEight") {
-			if(mouse2 == "dotTwelve") {
-				if(playerID == 1) {
-					greenVEight.SetActive(true);
+ 			}
+		}
+
+		if (Input.GetKey(KeyCode.D)) {
+			if (Input.GetKey(KeyCode.S)) {
+				if (playerID == 1) {
+					greenHThree.SetActive(true);
+					return true;
 				} else {
-					blueVEight.SetActive(true);
+					blueHThree.SetActive(true);
+					return true;
 				}
-				verticalArray[1,3] = true;
-			} else if(mouse2 == "dotSeven") {
-				if(playerID == 1) {
-					greenHSix.SetActive(true);
-				} else {
-					blueHSix.SetActive(true);
-				}
-				horizontalArray[1,2] = true;
-			} else if(mouse2 == "dotFour") {
-				if(playerID == 1) {
+				//horizontalArray[0, 2] = true;
+			} else if (Input.GetKey(KeyCode.J)) {
+				if (playerID == 1) {
 					greenVFour.SetActive(true);
+					return true;
 				} else {
 					blueVFour.SetActive(true);
+					return true;
 				}
-				verticalArray[0,3] = true;
-			}
-		} else if(mouse1 == "dotNine") {
-			if(mouse2 == "dotTen") {
-				if(playerID == 1) {
-					greenHSeven.SetActive(true);
-				} else {
-					blueHSeven.SetActive(true);
-				}
-				horizontalArray[2,0] = true;
-			} else if(mouse2 == "dotThirteen") {
-				if(playerID == 1) {
-					greenVNine.SetActive(true);
-				} else {
-					blueVNine.SetActive(true);
-				}
-				verticalArray[3,0] = true;
-			} else if(mouse2 == "dotFive") {
-				if(playerID == 1) {
-					greenVFive.SetActive(true);
-				} else {
-					blueVFive.SetActive(true);
-				}
-				verticalArray[1,0] = true;
-			}
-		} else if(mouse1 == "dotTen") {
-			if(mouse2 == "dotEleven") {
-				if(playerID == 1) {
-					greenHEight.SetActive(true);
-				} else {
-					blueHEight.SetActive(true);
-				}
-				horizontalArray[2,1] = true;
-			} else if(mouse2 == "dotFourteen") {
-				if(playerID == 1) {
-					greenVTen.SetActive(true);
-				} else {
-					blueVTen.SetActive(true);
-				}
-				verticalArray[2,1] = true;
-			} else if(mouse2 == "dotNine") {
-				if(playerID == 1) {
-					greenHSeven.SetActive(true);
-				} else {
-					blueHSeven.SetActive(true);
-				}
-				horizontalArray[2,0] = true;
-			} else if(mouse2 == "dotSix") {
-				if(playerID == 1) {
-					greenVSix.SetActive(true);
-				} else {
-					blueVSix.SetActive(true);
-				}
-				verticalArray[1,1] = true;
-			}
-		} else if(mouse1 == "dotEleven") {
-			if(mouse2 == "dotTwelve") {
-				if(playerID == 1) {
-					greenHNine.SetActive(true);
-				} else {
-					blueHNine.SetActive(true);
-				}
-				horizontalArray[2,2] = true;
-			} else if(mouse2 == "dotFifteen") {
-				if(playerID == 1) {
-					greenVEleven.SetActive(true);
-				} else {
-					blueVEleven.SetActive(true);
-				}
-				verticalArray[2,2] = true;
-			} else if(mouse2 == "dotTen") {
-				if(playerID == 1) {
-					greenHEight.SetActive(true);
-				} else {
-					blueHEight.SetActive(true);
-				}
-				horizontalArray[1,2] = true;
-			} else if(mouse2 == "dotSeven") {
-				if(playerID == 1) {
-					greenVSeven.SetActive(true);
-				} else {
-					blueVSeven.SetActive(true);
-				}
-				verticalArray[1,2] = true;
-			}
-		} else if(mouse1 == "dotTwelve") {
-			if(mouse2 == "dotSixteen") {
-				if(playerID == 1) {
-					greenVTwelve.SetActive(true);
-				} else {
-					blueVTwelve.SetActive(true);
-				}
-				verticalArray[2,3] = true;
-			} else if(mouse2 == "dotEight") {
-				if(playerID == 1) {
-					greenVEight.SetActive(true);
-				} else {
-					blueVEight.SetActive(true);
-				}
-				verticalArray[1,3] = true;
-			} else if(mouse2 == "dotEleven") {
-				if(playerID == 1) {
-					greenHNine.SetActive(true);
-				} else {
-					blueHNine.SetActive(true);
-				}
-				horizontalArray[2,2] = true;
-			}
-		} else if(mouse1 == "dotThirteen") {
-			if(mouse2 == "dotFourteen") {
-				if(playerID == 1) {
-					greenHTen.SetActive(true);
-				} else {
-					blueHTen.SetActive(true);
-				}
-				horizontalArray[3,0] = true;
-			} else if(mouse2 == "dotNine") {
-				if(playerID == 1) {
-					greenVNine.SetActive(true);
-				} else {
-					blueVNine.SetActive(true);
-				}
-				verticalArray[2,0] = true;
-			}
-		} else if(mouse1 == "dotFourteen") {
-			if(mouse2 == "dotFifteen") {
-				if(playerID == 1) {
-					greenHEleven.SetActive(true);
-				} else {
-					blueHEleven.SetActive(true);
-				}
-				horizontalArray[3,1] = true;
-			} else if(mouse2 == "dotTen") {
-				if(playerID == 1) {
-					greenVTen.SetActive(true);
-				} else {
-					blueVTen.SetActive(true);
-				}
-				verticalArray[2,1] = true;
-			} else if(mouse2 == "dotThirteen") {
-				if(playerID == 1) {
-					greenHTen.SetActive(true);
-				} else {
-					blueHTen.SetActive(true);
-				}
-				horizontalArray[3,0] = true;
-			}
-		} else if(mouse1 == "dotFifteen") {
-			if(mouse2 == "dotSixteen") {
-				if(playerID == 1) {
-					greenHTwelve.SetActive(true);
-				} else {
-					blueHTwelve.SetActive(true);
-				}
-				horizontalArray[3,2] = true;
-			} else if(mouse2 == "dotEleven") {
-				if(playerID == 1) {
-					greenVEleven.SetActive(true);
-				} else {
-					blueVEleven.SetActive(true);
-				}
-				verticalArray[2,2] = true;
-			} else if(mouse2 == "dotFourteen") {
-				if(playerID == 1) {
-					greenHEleven.SetActive(true);
-				} else {
-					blueHEleven.SetActive(true);
-				}
-				horizontalArray[3,2] = true;
-			}
-		} else if(mouse1 == "dotSixteen") {
-			if(mouse2 == "dotTwelve") {
-				if(playerID == 1) {
-					greenVTwelve.SetActive(true);
-				} else {
-					blueVTwelve.SetActive(true);
-				}
-				verticalArray[2,3] = true;
-			} else if(mouse2 == "dotFifteen") {
-				if(playerID == 1) {
-					greenHTwelve.SetActive(true);
-				} else {
-					blueHTwelve.SetActive(true);
-				}
-				verticalArray[2,3] = true;
+				//verticalArray[0, 3] = true;
 			}
 		}
+
+		if (Input.GetKey(KeyCode.F)) {
+			if (Input.GetKey(KeyCode.W)) {
+				if (playerID == 1) {
+					greenVOne.SetActive(true);
+					return true;
+				} else {
+					blueVOne.SetActive(true);
+					return true;
+				}
+				//verticalArray[0, 0] = true;
+			} else if (Input.GetKey(KeyCode.G)) {
+				if (playerID == 1) {
+					greenHFour.SetActive(true);
+					return true;
+				} else {
+					blueHFour.SetActive(true);
+					return true;
+				}
+				//horizontalArray[1, 0] = true;
+			} else if (Input.GetKey(KeyCode.K)) {
+				if (playerID == 1) {
+					greenVFive.SetActive(true);
+					return true;
+				} else {
+					blueVFive.SetActive(true);
+					return true;
+				}
+				//verticalArray[1, 0] = true;
+			}
+		}
+
+		if (Input.GetKey(KeyCode.G)) {
+			if (Input.GetKey(KeyCode.F)) {
+				if (playerID == 1) {
+					greenHFour.SetActive(true);
+					return true;
+				} else {
+					blueHFour.SetActive(true);
+					return true;
+				}
+				//horizontalArray[1, 0] = true;
+			} else if (Input.GetKey(KeyCode.A)) {
+				if (playerID == 1) {
+					greenVTwo.SetActive(true);
+					return true;
+				} else {
+					blueVTwo.SetActive(true);
+					return true;
+				}
+				//verticalArray[0, 1] = true;
+			} else if (Input.GetKey(KeyCode.H)) {
+				if (playerID == 1) {
+					greenHFive.SetActive(true);
+					return true;
+				} else {
+					blueHFive.SetActive(true);
+					return true;
+				}
+				//horizontalArray[1, 1] = true;
+			} else if (Input.GetKey(KeyCode.L)) {
+				if (playerID == 1) {
+					greenVSix.SetActive(true);
+					return true;
+				} else {
+					blueVSix.SetActive(true);
+					return true;
+				}
+				//verticalArray[1, 1] = true;
+			}
+		}
+
+		if (Input.GetKey(KeyCode.H)) {
+			if (Input.GetKey(KeyCode.S)) {
+				if (playerID == 1) {
+					greenVThree.SetActive(true);
+					return true;
+				} else {
+					blueVThree.SetActive(true);
+					return true;
+				}
+				//verticalArray[0, 2] = true;
+			} else if (Input.GetKey(KeyCode.G)) {
+				if (playerID == 1) {
+					greenHFive.SetActive(true);
+					return true;
+				} else {
+					blueHFive.SetActive(true);
+					return true;
+				}
+				//horizontalArray[1, 1] = true;
+			} else if (Input.GetKey(KeyCode.Z)) {
+				if (playerID == 1) {
+					greenVSeven.SetActive(true);
+					return true;
+				} else {
+					blueVSeven.SetActive(true);
+					return true;
+					//verticalArray[1, 2] = true;
+				}
+			} else if (Input.GetKey(KeyCode.J)) {
+				if (playerID == 1) {
+					greenHSix.SetActive(true);
+					return true;
+				} else {
+					blueHSix.SetActive(true);
+					return true;
+				}
+				//horizontalArray[1, 2] = true;
+			}
+		}
+
+		if (Input.GetKey(KeyCode.J)) {
+			if (Input.GetKey(KeyCode.D)) {
+				if (playerID == 1) {
+					greenVFour.SetActive(true);
+					return true;
+				} else {
+					blueVFour.SetActive(true);
+					return true;
+				}
+				//verticalArray[0, 3] = true;
+			} else if (Input.GetKey(KeyCode.H)) {
+				if (playerID == 1) {
+					greenHSix.SetActive(true);
+					return true;
+				} else {
+					blueHSix.SetActive(true);
+					return true;
+				}
+				//horizontalArray[1, 2] = true;
+			} else if (Input.GetKey(KeyCode.X)) {
+				if (playerID == 1) {
+					greenVEight.SetActive(true);
+					return true;
+				} else {
+					blueVEight.SetActive(true);
+					return true;
+				}
+				//verticalArray[1, 3] = true;
+			}
+		}
+
+		if (Input.GetKey(KeyCode.K)) {
+			if (Input.GetKey(KeyCode.F)) {
+				Debug.Log("4");
+				if (playerID == 1) {
+					greenVFive.SetActive(true);
+					return true;
+				} else {
+					blueVFive.SetActive(true);
+					return true;
+				}
+				//verticalArray[1, 0] = true;
+			} else if (Input.GetKey(KeyCode.L)) {
+				if (playerID == 1) {
+					greenHSeven.SetActive(true);
+					return true;
+				} else {
+					blueHSeven.SetActive(true);
+					return true;
+				}
+				//horizontalArray[2, 0] = true;
+			} else if (Input.GetKey(KeyCode.Space)) {
+				if (playerID == 1) {
+					greenVNine.SetActive(true);
+					return true;
+				} else {
+					blueVNine.SetActive(true);
+					return true;
+				}
+				//verticalArray[2, 0] = true;
+			}
+		}
+
+		if (Input.GetKey(KeyCode.L)) {
+			if (Input.GetKey(KeyCode.G)) {
+				if (playerID == 1) {
+					greenVSix.SetActive(true);
+					return true;
+				} else {
+					blueVSix.SetActive(true);
+					return true;
+				}
+				//verticalArray[1, 1] = true;
+			} else if (Input.GetKey(KeyCode.Z)) {
+				if (playerID == 1) {
+					greenHEight.SetActive(true);
+					return true;
+				} else {
+					blueHEight.SetActive(true);
+					return true;
+				}
+				//horizontalArray[2, 1] = true;
+			} else if (Input.GetKey(KeyCode.UpArrow)) {
+				if (playerID == 1) {
+					greenVTen.SetActive(true);
+					return true;
+				} else {
+					blueVTen.SetActive(true);
+					return true;
+				}
+				//verticalArray[2, 1] = true;
+			}
+		}
+
+		if (Input.GetKey(KeyCode.Z)) {
+			if (Input.GetKey(KeyCode.H)) {
+				if (playerID == 1) {
+					greenVSeven.SetActive(true);
+					return true;
+				} else {
+					blueVSeven.SetActive(true);
+					return true;
+					//verticalArray[1, 2] = true;
+				}
+			} else if (Input.GetKey(KeyCode.L)) {
+				if (playerID == 1) {
+					greenHEight.SetActive(true);
+					return true;
+				} else {
+					blueHEight.SetActive(true);
+					return true;
+				}
+				//horizontalArray[2, 1] = true;
+
+			} else if (Input.GetKey(KeyCode.X)) {
+				if (playerID == 1) {
+					greenHNine.SetActive(true);
+					return true;
+				} else {
+					blueHNine.SetActive(true);
+					return true;
+				}
+				//horizontalArray[2, 2] = true;
+			} else if (Input.GetKey(KeyCode.DownArrow)) {
+				if (playerID == 1) {
+					greenVEleven.SetActive(true);
+					return true;
+				} else {
+					blueVEleven.SetActive(true);
+					return true;
+				}
+				//verticalArray[2, 2] = true;
+			}
+		}
+
+		if (Input.GetKey(KeyCode.X)) {
+			if (Input.GetKey(KeyCode.J)) {
+				if (playerID == 1) {
+					greenVEight.SetActive(true);
+					return true;
+				} else {
+					blueVEight.SetActive(true);
+					return true;
+				}
+				//verticalArray[1, 3] = true;
+			} else if (Input.GetKey(KeyCode.Z)) {
+				if (playerID == 1) {
+					greenHNine.SetActive(true);
+					return true;
+				} else {
+					blueHNine.SetActive(true);
+					return true;
+				}
+				//horizontalArray[2, 2] = true;
+			} else if (Input.GetKey(KeyCode.LeftArrow)) {
+				if (playerID == 1) {
+					greenVTwelve.SetActive(true);
+					return true;
+				} else {
+					blueVTwelve.SetActive(true);
+					return true;
+				}
+				//verticalArray[2, 3] = true;
+			}
+		}
+
+		if (Input.GetKey(KeyCode.Space)) {
+			if (Input.GetKey(KeyCode.K)) {
+				if (playerID == 1) {
+					greenVNine.SetActive(true);
+					return true;
+				} else {
+					blueVNine.SetActive(true);
+					return true;
+				}
+				//verticalArray[2, 0] = true;
+			} else if (Input.GetKey(KeyCode.UpArrow)) {
+				if (playerID == 1) {
+					greenHTen.SetActive(true);
+					return true;
+				} else {
+					blueHTen.SetActive(true);
+					return true;
+				}
+				//horizontalArray[3, 0] = true;
+			}
+		}
+
+		if (Input.GetKey(KeyCode.UpArrow)) {
+			if (Input.GetKey(KeyCode.L)) {
+				if (playerID == 1) {
+					greenVTen.SetActive(true);
+					return true;
+				} else {
+					blueVTen.SetActive(true);
+					return true;
+				}
+				//verticalArray[2, 1] = true;
+			} else if (Input.GetKey(KeyCode.Space)) {
+				if (playerID == 1) {
+					greenHTen.SetActive(true);
+					return true;
+				} else {
+					blueHTen.SetActive(true);
+					return true;
+				}
+				//horizontalArray[3, 0] = true;
+			} else if (Input.GetKey(KeyCode.DownArrow)) {
+				if (playerID == 1) {
+					greenHEleven.SetActive(true);
+					return true;
+				} else {
+					blueHEleven.SetActive(true);
+					return true;
+				}
+				//horizontalArray[3, 1] = true;
+			}
+		}
+
+		if (Input.GetKey(KeyCode.DownArrow)) {
+			if (Input.GetKey(KeyCode.Z)) {
+				if (playerID == 1) {
+					greenVTwelve.SetActive(true);
+					return true;
+				} else {
+					blueVTwelve.SetActive(true);
+					return true;
+				}
+				//verticalArray[2, 2] = true;
+			} else if (Input.GetKey(KeyCode.UpArrow)) {
+				if (playerID == 1) {
+					greenHEleven.SetActive(true);
+					return true;
+				} else {
+					blueHEleven.SetActive(true);
+					return true;
+				}
+				//horizontalArray[3, 1] = true;
+			} else if (Input.GetKey(KeyCode.LeftArrow)) {
+				if (playerID == 1) {
+					greenHTwelve.SetActive(true);
+					return true;
+				} else {
+					blueHTwelve.SetActive(true);
+					return true;
+				}
+				//horizontalArray[3, 2] = true;
+			}
+		}
+
+		if (Input.GetKey(KeyCode.LeftArrow)) {
+			if (Input.GetKey(KeyCode.X)) {
+				if (playerID == 1) {
+					greenVTwelve.SetActive(true);
+					return true;
+				} else {
+					blueVTwelve.SetActive(true);
+					return true;
+				}
+				//verticalArray[2, 3] = true;
+			} else if (Input.GetKey(KeyCode.DownArrow)) {
+				if (playerID == 1) {
+					greenHTwelve.SetActive(true);
+					return true;
+				} else {
+					blueHTwelve.SetActive(true);
+					return true;
+				}
+				//horizontalArray[3, 2] = true;
+			}
+		}
+		return false;
 	}
 }
